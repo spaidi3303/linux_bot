@@ -1,6 +1,8 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
+
+import command
 import error
 
 users_try = {}
@@ -10,7 +12,8 @@ async def main():
     bot = Bot(token=TOKEN)
     dp = Dispatcher()
     dp.include_routers(
-        error.router
+        error.router,
+        command.router
 
     )
     logging.basicConfig(level=logging.INFO)
