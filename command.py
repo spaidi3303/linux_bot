@@ -31,6 +31,8 @@ async def execute_comm(message: types.Message, command: str):
                 await message.answer(f"❌ Ошибка cd:\n<code>{str(e)}</code>",
                                      parse_mode="HTML")
                 return
+        if requires_sudo(command):
+            command = f"echo Dosya1009 | sudo -S {command}"
         result = subprocess.run(
             command,
             shell=True,
@@ -56,3 +58,19 @@ async def execute_comm(message: types.Message, command: str):
     except Exception as e:
         await message.answer(f"⛔ Критическая ошибка:\n<code>{str(e)}</code>",
                              parse_mode="HTML")
+
+
+async def requires_sudo(command: str) -> bool:
+    try:
+        subprocess.run(
+            ["sudo", "-n", *command.split()],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=5,
+        )
+        return False
+    except subprocess.CalledProcessError:
+        return True
+    except Exception:
+        return False
