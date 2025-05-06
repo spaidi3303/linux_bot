@@ -31,13 +31,25 @@ async def execute_comm(message: types.Message, command: str):
                 await message.answer(f"❌ Ошибка cd:\n<code>{str(e)}</code>",
                                      parse_mode="HTML")
                 return
-        result = subprocess.run(
-            command,
-            shell=True,
-            capture_output=True,
-            text=True,
-            timeout=10
-        )
+        if await requires_sudo(command):
+            command = f"sudo {command}"
+            print(command)
+            result = subprocess.run(
+                command,
+                shell=True,
+                input="Dosya1009",
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+        else:
+            result = subprocess.run(
+                command,
+                shell=True,
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
         response = []
         if result.stdout:
             response.append(f"✅ Результат:\n<code>{result.stdout}</code>")
@@ -57,3 +69,18 @@ async def execute_comm(message: types.Message, command: str):
         await message.answer(f"⛔ Критическая ошибка:\n<code>{str(e)}</code>",
                              parse_mode="HTML")
 
+
+async def requires_sudo(command: str) -> bool:
+    try:
+        subprocess.run(
+            ["sudo", "-n", *command.split()],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=5,
+        )
+        return False
+    except subprocess.CalledProcessError:
+        return True
+    except Exception:
+        return False
