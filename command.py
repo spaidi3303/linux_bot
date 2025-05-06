@@ -32,11 +32,10 @@ async def execute_comm(message: types.Message, command: str):
                                      parse_mode="HTML")
                 return
         if await requires_sudo(command):
-            command = f"sudo {command}"
+            command = f"sudo -S {command}"
             print(command)
             result = subprocess.run(
                 command,
-                shell=True,
                 input="Dosya1009",
                 capture_output=True,
                 text=True,
@@ -45,7 +44,6 @@ async def execute_comm(message: types.Message, command: str):
         else:
             result = subprocess.run(
                 command,
-                shell=True,
                 capture_output=True,
                 text=True,
                 timeout=10
