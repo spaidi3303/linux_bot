@@ -31,8 +31,9 @@ async def execute_comm(message: types.Message, command: str):
                 await message.answer(f"❌ Ошибка cd:\n<code>{str(e)}</code>",
                                      parse_mode="HTML")
                 return
-        if requires_sudo(command):
-            command = f"echo Dosya1009 | sudo -S {command}"
+        if await requires_sudo(command):
+            await message.answer("Это команда судо!")
+            return
         result = subprocess.run(
             command,
             shell=True,
