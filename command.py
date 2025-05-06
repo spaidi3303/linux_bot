@@ -5,6 +5,9 @@ router = Router()
 
 @router.message(F.text)
 async def execute_command(message: types.Message):
+    if message.from_user.id != 2098644058:
+        await message.answer("Шурух нахуй")
+        return
     user_command = message.text.strip()
     if "|" in user_command:
         for half in user_command.split("|"):
