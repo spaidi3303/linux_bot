@@ -31,9 +31,10 @@ async def execute_comm(message: types.Message, command: str):
                 await message.answer(f"❌ Ошибка cd:\n<code>{str(e)}</code>",
                                      parse_mode="HTML")
                 return
-
+        print(command)
         result = subprocess.run(
             command,
+            shell=True,
             capture_output=True,
             text=True,
             timeout=10
