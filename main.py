@@ -1,12 +1,12 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
-
+from dotenv import load_dotenv
 import command
 import error
-
-users_try = {}
-TOKEN = '8043533102:AAHj8BfINsY0coORH92wr5nWbNQ0s_7HOaM'
+import os
+load_dotenv('secrets.env')
+TOKEN = os.getenv('TOKEN')
 
 async def main():
     bot = Bot(token=TOKEN)
